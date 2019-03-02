@@ -31,7 +31,16 @@ class ViewController: UIViewController {
 
     private lazy var label: UILabel = {
         let label = UILabel(frame: .zero)
-        label.text = "Page \(navigationController?.viewControllers.count ?? 0)"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.accessibilityTraits = .header
+        return label
+    }()
+
+    private lazy var label2: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.font = UIFont.systemFont(ofSize: 10)
         label.accessibilityTraits = .header
         return label
     }()
@@ -70,13 +79,24 @@ class ViewController: UIViewController {
         }
         navigationItem.rightBarButtonItems = [rightButton]
 
+        let subtitle = "Page \(navigationController?.viewControllers.count ?? 0)"
+
         switch titleViewStyle {
-        case .some(.stackView):
-            stackView.addArrangedSubview(label)
-            stackView.accessibilityLabel = label.text
-            navigationItem.titleView = stackView
-        default:
+        case .some(.label):
+            let title = "UILabel"
+            let attrText = NSMutableAttributedString(string: title, attributes: [.font: UIFont.systemFont(ofSize: 15)])
+            attrText.append(NSAttributedString(string: "\n"))
+            attrText.append(NSAttributedString(string: subtitle, attributes: [.font: UIFont.systemFont(ofSize: 10)]))
+            label.attributedText = attrText
+            label.accessibilityLabel = title.appending(", \(subtitle)")
             navigationItem.titleView = label
+        default:
+            label.text = "UIStackView"
+            label2.text = subtitle
+            stackView.addArrangedSubview(label)
+            stackView.addArrangedSubview(label2)
+            stackView.accessibilityLabel = label.text?.appending(", \(label2.text!)")
+            navigationItem.titleView = stackView
         }
     }
 
