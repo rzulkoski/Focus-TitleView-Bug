@@ -81,8 +81,8 @@ class ViewController: UIViewController {
 
         let subtitle = "Page \(navigationController?.viewControllers.count ?? 0)"
 
-        switch titleViewStyle {
-        case .some(.label):
+        switch titleViewStyle ?? .stackView {
+        case .label:
             let title = "UILabel"
             let attrText = NSMutableAttributedString(string: title, attributes: [.font: UIFont.systemFont(ofSize: 15)])
             attrText.append(NSAttributedString(string: "\n"))
@@ -90,7 +90,7 @@ class ViewController: UIViewController {
             label.attributedText = attrText
             label.accessibilityLabel = title.appending(", \(subtitle)")
             navigationItem.titleView = label
-        default:
+        case .stackView:
             label.text = "UIStackView"
             label2.text = subtitle
             stackView.addArrangedSubview(label)
